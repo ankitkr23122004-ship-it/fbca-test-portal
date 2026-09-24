@@ -1,1 +1,4670 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b1220">
+
+<title>FBCA Test Portal</title>
+
+<!-- Excel Import Library -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+:root{
+    --primary:#2563eb;
+    --primary-dark:#1d4ed8;
+    --bg:#f1f5f9;
+    --card:#ffffff;
+    --text:#0f172a;
+    --muted:#64748b;
+    --border:#e2e8f0;
+    --success:#16a34a;
+    --danger:#dc2626;
+    --warning:#d97706;
+    --purple:#7c3aed;
+    --sidebar:#0f172a;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+}
+
+button,input,select,textarea{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.hidden{
+    display:none!important;
+}
+
+/* =========================
+   LOGIN
+========================= */
+
+.login-page{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:
+        radial-gradient(circle at top right,#2563eb22,transparent 35%),
+        linear-gradient(135deg,#0f172a,#172554);
+}
+
+.login-card{
+    width:100%;
+    max-width:480px;
+    background:#fff;
+    border-radius:20px;
+    padding:35px;
+    box-shadow:0 25px 60px #0005;
+}
+
+.brand{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.brand-logo{
+    width:70px;
+    height:70px;
+    border-radius:18px;
+    margin:auto;
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:25px;
+    font-weight:800;
+}
+
+.brand h1{
+    margin-top:15px;
+    font-size:25px;
+}
+
+.brand p{
+    color:var(--muted);
+    margin-top:5px;
+}
+
+.login-tabs{
+    display:flex;
+    gap:5px;
+    background:#f1f5f9;
+    padding:5px;
+    border-radius:10px;
+    margin-bottom:20px;
+}
+
+.login-tabs button{
+    flex:1;
+    border:0;
+    background:transparent;
+    padding:11px;
+    border-radius:7px;
+}
+
+.login-tabs button.active{
+    background:white;
+    color:var(--primary);
+    font-weight:700;
+    box-shadow:0 2px 8px #0001;
+}
+
+.form-group{
+    margin-bottom:16px;
+}
+
+.form-group label{
+    display:block;
+    font-size:14px;
+    font-weight:600;
+    margin-bottom:7px;
+}
+
+.form-control{
+    width:100%;
+    padding:12px 13px;
+    border:1px solid var(--border);
+    border-radius:9px;
+    outline:none;
+    background:white;
+}
+
+.form-control:focus{
+    border-color:var(--primary);
+    box-shadow:0 0 0 3px #2563eb15;
+}
+
+.btn{
+    border:0;
+    border-radius:9px;
+    padding:11px 17px;
+    font-weight:600;
+    transition:.2s;
+}
+
+.btn:hover{
+    transform:translateY(-1px);
+}
+
+.btn-primary{
+    background:var(--primary);
+    color:white;
+}
+
+.btn-primary:hover{
+    background:var(--primary-dark);
+}
+
+.btn-success{
+    background:var(--success);
+    color:white;
+}
+
+.btn-danger{
+    background:var(--danger);
+    color:white;
+}
+
+.btn-secondary{
+    background:#e2e8f0;
+    color:#0f172a;
+}
+
+.btn-warning{
+    background:#f59e0b;
+    color:white;
+}
+
+.full{
+    width:100%;
+}
+
+.demo-info{
+    margin-top:18px;
+    padding:12px;
+    border-radius:9px;
+    background:#eff6ff;
+    color:#1e40af;
+    font-size:13px;
+}
+
+/* =========================
+   APP
+========================= */
+
+.app{
+    min-height:100vh;
+    display:flex;
+}
+
+.sidebar{
+    width:250px;
+    background:var(--sidebar);
+    color:white;
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    overflow-y:auto;
+    z-index:50;
+}
+
+.sidebar-brand{
+    padding:23px 20px;
+    border-bottom:1px solid #ffffff15;
+}
+
+.sidebar-brand strong{
+    font-size:18px;
+}
+
+.sidebar-brand small{
+    display:block;
+    color:#94a3b8;
+    margin-top:4px;
+}
+
+.nav{
+    padding:15px 10px;
+}
+
+.nav button{
+    width:100%;
+    border:0;
+    background:transparent;
+    color:#cbd5e1;
+    text-align:left;
+    padding:12px 13px;
+    border-radius:8px;
+    margin-bottom:4px;
+}
+
+.nav button:hover,
+.nav button.active{
+    background:#2563eb;
+    color:white;
+}
+
+.main{
+    margin-left:250px;
+    width:calc(100% - 250px);
+}
+
+.topbar{
+    height:65px;
+    background:white;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 25px;
+    position:sticky;
+    top:0;
+    z-index:30;
+}
+
+.topbar-title{
+    font-weight:700;
+}
+
+.content{
+    padding:25px;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+.page-title{
+    margin-bottom:20px;
+}
+
+.page-title h2{
+    font-size:25px;
+}
+
+.page-title p{
+    color:var(--muted);
+    margin-top:5px;
+}
+
+/* =========================
+   DASHBOARD
+========================= */
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+    margin-bottom:25px;
+}
+
+.stat-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:13px;
+    padding:20px;
+}
+
+.stat-card small{
+    color:var(--muted);
+}
+
+.stat-card h2{
+    margin-top:8px;
+    font-size:27px;
+}
+
+/* =========================
+   CARDS / TABLE
+========================= */
+
+.card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:13px;
+    padding:20px;
+    margin-bottom:20px;
+}
+
+.card-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.table-wrapper{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    padding:12px;
+    border-bottom:1px solid var(--border);
+    text-align:left;
+    font-size:14px;
+}
+
+th{
+    background:#f8fafc;
+}
+
+.badge{
+    display:inline-block;
+    padding:4px 8px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:700;
+}
+
+.badge-green{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.badge-red{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+.badge-yellow{
+    background:#fef3c7;
+    color:#92400e;
+}
+
+.badge-purple{
+    background:#ede9fe;
+    color:#5b21b6;
+}
+
+/* =========================
+   STUDENT TEST
+========================= */
+
+.student-page{
+    min-height:100vh;
+    background:#f8fafc;
+}
+
+.student-header{
+    height:65px;
+    background:#0f172a;
+    color:white;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 20px;
+    position:sticky;
+    top:0;
+    z-index:50;
+}
+
+.timer{
+    background:#dc2626;
+    padding:9px 15px;
+    border-radius:8px;
+    font-weight:800;
+}
+
+.test-layout{
+    display:grid;
+    grid-template-columns:1fr 280px;
+    gap:20px;
+    padding:20px;
+    max-width:1400px;
+    margin:auto;
+}
+
+.question-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:25px;
+}
+
+.question-number{
+    color:var(--primary);
+    font-weight:700;
+    margin-bottom:12px;
+}
+
+.question-text{
+    font-size:20px;
+    line-height:1.5;
+    margin-bottom:25px;
+}
+
+.option{
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:14px;
+    margin-bottom:12px;
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.option:hover{
+    border-color:var(--primary);
+    background:#eff6ff;
+}
+
+.option.selected{
+    border-color:var(--primary);
+    background:#eff6ff;
+}
+
+.option input{
+    margin-top:3px;
+}
+
+.test-actions{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin-top:25px;
+    flex-wrap:wrap;
+}
+
+.palette-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:18px;
+    height:max-content;
+    position:sticky;
+    top:85px;
+}
+
+.palette{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:8px;
+    margin-top:15px;
+}
+
+.palette button{
+    width:38px;
+    height:38px;
+    border-radius:7px;
+    border:1px solid var(--border);
+    background:#e2e8f0;
+}
+
+.palette button.answered{
+    background:#16a34a;
+    color:white;
+}
+
+.palette button.review{
+    background:#7c3aed;
+    color:white;
+}
+
+.palette button.current{
+    outline:3px solid #2563eb55;
+}
+
+.palette-legend{
+    margin-top:18px;
+    font-size:12px;
+    color:var(--muted);
+}
+
+.legend-item{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    margin-bottom:7px;
+}
+
+.legend-box{
+    width:14px;
+    height:14px;
+    border-radius:3px;
+}
+
+/* =========================
+   RESULT
+========================= */
+
+.result-card{
+    max-width:850px;
+    margin:30px auto;
+    background:white;
+    border-radius:16px;
+    padding:30px;
+    border:1px solid var(--border);
+}
+
+.result-score{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.result-score h1{
+    font-size:55px;
+    color:var(--primary);
+}
+
+.result-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+}
+
+.result-stat{
+    text-align:center;
+    background:#f8fafc;
+    padding:15px;
+    border-radius:10px;
+}
+
+.result-stat strong{
+    display:block;
+    font-size:22px;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:#0008;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:100;
+}
+
+.modal-box{
+    background:white;
+    width:100%;
+    max-width:600px;
+    max-height:90vh;
+    overflow-y:auto;
+    border-radius:15px;
+    padding:25px;
+}
+
+.modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    background:#0f172a;
+    color:white;
+    padding:13px 18px;
+    border-radius:9px;
+    z-index:999;
+    box-shadow:0 10px 30px #0003;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+.mobile-menu{
+    display:none;
+    border:0;
+    background:transparent;
+    font-size:22px;
+}
+
+@media(max-width:900px){
+
+    .sidebar{
+        transform:translateX(-100%);
+        transition:.3s;
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-left:0;
+        width:100%;
+    }
+
+    .mobile-menu{
+        display:block;
+    }
+
+    .stats-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .test-layout{
+        grid-template-columns:1fr;
+    }
+
+    .palette-card{
+        position:static;
+        order:-1;
+    }
+
+}
+
+@media(max-width:600px){
+
+    .content{
+        padding:15px;
+    }
+
+    .stats-grid{
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+    }
+
+    .stat-card{
+        padding:14px;
+    }
+
+    .result-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .login-card{
+        padding:25px 20px;
+    }
+
+    .question-card{
+        padding:18px;
+    }
+
+    .question-text{
+        font-size:17px;
+    }
+
+    .test-header-title{
+        font-size:14px;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     LOGIN
+===================================================== -->
+
+<div id="loginPage" class="login-page">
+
+    <div class="login-card">
+
+        <div class="brand">
+            <div class="brand-logo">FB</div>
+            <h1>Future Boost Computer Academy</h1>
+            <p>Professional Online Test Portal</p>
+        </div>
+
+        <div class="login-tabs">
+            <button id="studentTab" class="active"
+                    onclick="showLoginType('student')">
+                Student
+            </button>
+
+            <button id="adminTab"
+                    onclick="showLoginType('admin')">
+                Admin
+            </button>
+        </div>
+
+        <!-- STUDENT LOGIN -->
+
+        <form id="studentLoginForm">
+
+            <div class="form-group">
+                <label>Student Name</label>
+                <input id="studentName"
+                       class="form-control"
+                       placeholder="Enter your full name"
+                       required>
+            </div>
+
+            <div class="form-group">
+                <label>Batch No.</label>
+                <input id="studentBatch"
+                       class="form-control"
+                       placeholder="Example: BATCH-01"
+                       required>
+            </div>
+
+            <div class="form-group">
+                <label>Branch</label>
+
+                <select id="studentBranch"
+                        class="form-control"
+                        required>
+
+                    <option value="">Select Branch</option>
+                    <option>Punpun</option>
+                    <option>Kurthaul</option>
+
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Roll No.</label>
+                <input id="studentRoll"
+                       class="form-control"
+                       placeholder="Enter roll number"
+                       required>
+            </div>
+
+            <button class="btn btn-primary full">
+                Continue
+            </button>
+
+        </form>
+
+        <!-- ADMIN LOGIN -->
+
+        <form id="adminLoginForm" class="hidden">
+
+            <div class="form-group">
+                <label>Admin Password</label>
+
+                <input type="password"
+                       id="adminPassword"
+                       class="form-control"
+                       placeholder="Enter admin password"
+                       required>
+            </div>
+
+            <button class="btn btn-primary full">
+                Login as Admin
+            </button>
+
+            <div class="demo-info">
+                Demo password: <strong>admin123</strong>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+
+<!-- =====================================================
+     ADMIN APP
+===================================================== -->
+
+<div id="adminApp" class="app hidden">
+
+    <aside id="sidebar" class="sidebar">
+
+        <div class="sidebar-brand">
+            <strong>FBCA Test Portal</strong>
+            <small>Admin Panel</small>
+        </div>
+
+        <nav class="nav">
+
+            <button class="active"
+                    onclick="showPage('dashboard',this)">
+                📊 Dashboard
+            </button>
+
+            <button onclick="showPage('questions',this)">
+                📚 Question Bank
+            </button>
+
+            <button onclick="showPage('import',this)">
+                📥 Excel Import
+            </button>
+
+            <button onclick="showPage('tests',this)">
+                📝 Tests
+            </button>
+
+            <button onclick="showPage('students',this)">
+                👨‍🎓 Students
+            </button>
+
+            <button onclick="showPage('results',this)">
+                📈 Results
+            </button>
+
+            <button onclick="showPage('backup',this)">
+                💾 Backup & Restore
+            </button>
+
+            <button onclick="logout()">
+                🚪 Logout
+            </button>
+
+        </nav>
+
+    </aside>
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <button class="mobile-menu"
+                    onclick="toggleSidebar()">
+                ☰
+            </button>
+
+            <div class="topbar-title">
+                Future Boost Computer Academy
+            </div>
+
+            <div>
+                <span class="badge badge-green">
+                    Admin
+                </span>
+            </div>
+
+        </header>
+
+
+        <div class="content">
+
+            <!-- DASHBOARD -->
+
+            <section id="page-dashboard"
+                     class="page active">
+
+                <div class="page-title">
+
+                    <h2>Dashboard</h2>
+
+                    <p>
+                        Manage your online examination system.
+                    </p>
+
+                </div>
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <small>Total Questions</small>
+                        <h2 id="statQuestions">0</h2>
+                    </div>
+
+                    <div class="stat-card">
+                        <small>Total Tests</small>
+                        <h2 id="statTests">0</h2>
+                    </div>
+
+                    <div class="stat-card">
+                        <small>Total Students</small>
+                        <h2 id="statStudents">0</h2>
+                    </div>
+
+                    <div class="stat-card">
+                        <small>Total Attempts</small>
+                        <h2 id="statAttempts">0</h2>
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-title">
+
+                        <h3>Quick Actions</h3>
+
+                    </div>
+
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+
+                        <button class="btn btn-primary"
+                                onclick="showPage('import')">
+                            Import Excel
+                        </button>
+
+                        <button class="btn btn-success"
+                                onclick="openAddQuestion()">
+                            Add Question
+                        </button>
+
+                        <button class="btn btn-secondary"
+                                onclick="openTestCreator()">
+                            Create Test
+                        </button>
+
+                        <button class="btn btn-warning"
+                                onclick="downloadBackup()">
+                            Backup Data
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-title">
+                        <h3>Recent Attempts</h3>
+                    </div>
+
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Test</th>
+                                    <th>Score</th>
+                                    <th>Percentage</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="recentAttempts">
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- QUESTION BANK -->
+
+            <section id="page-questions"
+                     class="page">
+
+                <div class="page-title">
+
+                    <h2>Question Bank</h2>
+
+                    <p>
+                        Manage all questions.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+
+                        <input id="questionSearch"
+                               class="form-control"
+                               style="max-width:350px"
+                               placeholder="Search question..."
+                               oninput="renderQuestions()">
+
+                        <select id="difficultyFilter"
+                                class="form-control"
+                                style="max-width:180px"
+                                onchange="renderQuestions()">
+
+                            <option value="">All Difficulty</option>
+                            <option>Easy</option>
+                            <option>Medium</option>
+                            <option>Hard</option>
+
+                        </select>
+
+                        <button class="btn btn-primary"
+                                onclick="openAddQuestion()">
+                            + Add Question
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>#</th>
+                                    <th>Question</th>
+                                    <th>Topic</th>
+                                    <th>Difficulty</th>
+                                    <th>Answer</th>
+                                    <th>Action</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="questionTable">
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- IMPORT -->
+
+            <section id="page-import"
+                     class="page">
+
+                <div class="page-title">
+
+                    <h2>Excel Import</h2>
+
+                    <p>
+                        Import questions from Excel.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>Excel Format</h3>
+
+                    <p style="margin:12px 0;color:#64748b;">
+                        Your Excel file should contain these columns:
+                    </p>
+
+                    <code>
+                        Question | Option A | Option B | Option C |
+                        Option D | Answer | Explanation | Topic |
+                        Difficulty | Image
+                    </code>
+
+                </div>
+
+
+                <div class="card">
+
+                    <input type="file"
+                           id="excelFile"
+                           accept=".xlsx,.xls,.csv"
+                           class="form-control">
+
+                    <br>
+
+                    <button class="btn btn-primary"
+                            onclick="importExcel()">
+                        Import Questions
+                    </button>
+
+                    <button class="btn btn-secondary"
+                            onclick="downloadTemplate()">
+                        Download Excel Template
+                    </button>
+
+                </div>
+
+                <div id="importPreview"></div>
+
+            </section>
+
+
+            <!-- TESTS -->
+
+            <section id="page-tests"
+                     class="page">
+
+                <div class="page-title">
+
+                    <h2>Tests</h2>
+
+                    <p>
+                        Create and manage tests.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <button class="btn btn-primary"
+                            onclick="openTestCreator()">
+                        + Create New Test
+                    </button>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>Test</th>
+                                    <th>Questions</th>
+                                    <th>Duration</th>
+                                    <th>Marks</th>
+                                    <th>Action</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="testTable">
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- STUDENTS -->
+
+            <section id="page-students"
+                     class="page">
+
+                <div class="page-title">
+
+                    <h2>Students</h2>
+
+                    <p>
+                        Students who have attempted tests.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Batch</th>
+                                    <th>Branch</th>
+                                    <th>Roll</th>
+                                    <th>Attempts</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="studentTable">
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- RESULTS -->
+
+            <section id="page-results"
+                     class="page">
+
+                <div class="page-title">
+
+                    <h2>Results</h2>
+
+                    <p>
+                        Complete test attempt history.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Test</th>
+                                    <th>Correct</th>
+                                    <th>Wrong</th>
+                                    <th>Skipped</th>
+                                    <th>Score</th>
+                                    <th>%</th>
+                                    <th>Date</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="resultTable">
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- BACKUP -->
+
+            <section id="page-backup"
+                     class="page">
+
+                <div class="page-title">
+
+                    <h2>Backup & Restore</h2>
+
+                    <p>
+                        Export or restore portal data.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>Export Backup</h3>
+
+                    <p style="margin:10px 0;color:#64748b;">
+                        Save questions, tests, students and results
+                        into a JSON backup file.
+                    </p>
+
+                    <button class="btn btn-primary"
+                            onclick="downloadBackup()">
+                        Download Full Backup
+                    </button>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>Restore Backup</h3>
+
+                    <p style="margin:10px 0;color:#64748b;">
+                        Select a previously exported FBCA backup file.
+                    </p>
+
+                    <input type="file"
+                           id="backupFile"
+                           accept=".json"
+                           class="form-control">
+
+                    <br>
+
+                    <button class="btn btn-warning"
+                            onclick="restoreBackup()">
+                        Restore Backup
+                    </button>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- =====================================================
+     STUDENT DETAILS / TEST SELECT
+===================================================== -->
+
+<div id="studentApp"
+     class="student-page hidden">
+
+    <header class="student-header">
+
+        <strong class="test-header-title">
+            FBCA Test Portal
+        </strong>
+
+        <button class="btn btn-danger"
+                onclick="studentLogout()">
+            Exit
+        </button>
+
+    </header>
+
+    <div id="studentHome"
+         style="max-width:900px;margin:30px auto;padding:20px;">
+
+        <div class="card">
+
+            <h2>Welcome, <span id="welcomeStudent"></span></h2>
+
+            <p style="color:#64748b;margin-top:8px;">
+                Select a test to continue.
+            </p>
+
+        </div>
+
+        <div id="studentTestList"></div>
+
+    </div>
+
+
+    <!-- TEST SCREEN -->
+
+    <div id="testScreen" class="hidden">
+
+        <div class="student-header">
+
+            <strong id="runningTestName">
+                Test
+            </strong>
+
+            <div id="timer"
+                 class="timer">
+                00:00
+            </div>
+
+        </div>
+
+
+        <div class="test-layout">
+
+            <main class="question-card">
+
+                <div class="question-number"
+                     id="questionNumber">
+                </div>
+
+                <div class="question-text"
+                     id="questionText">
+                </div>
+
+                <div id="optionsContainer"></div>
+
+                <div class="test-actions">
+
+                    <button class="btn btn-secondary"
+                            onclick="previousQuestion()">
+                        ← Previous
+                    </button>
+
+                    <button class="btn btn-warning"
+                            onclick="toggleReview()">
+                        Mark for Review
+                    </button>
+
+                    <button class="btn btn-secondary"
+                            onclick="clearAnswer()">
+                        Clear
+                    </button>
+
+                    <button class="btn btn-primary"
+                            onclick="nextQuestion()">
+                        Next →
+                    </button>
+
+                    <button class="btn btn-danger"
+                            onclick="confirmSubmit()">
+                        Submit Test
+                    </button>
+
+                </div>
+
+            </main>
+
+
+            <aside class="palette-card">
+
+                <h3>Question Palette</h3>
+
+                <div id="questionPalette"
+                     class="palette">
+                </div>
+
+                <div class="palette-legend">
+
+                    <div class="legend-item">
+                        <span class="legend-box"
+                              style="background:#16a34a">
+                        </span>
+                        Answered
+                    </div>
+
+                    <div class="legend-item">
+                        <span class="legend-box"
+                              style="background:#7c3aed">
+                        </span>
+                        Review
+                    </div>
+
+                    <div class="legend-item">
+                        <span class="legend-box"
+                              style="background:#e2e8f0">
+                        </span>
+                        Not Answered
+                    </div>
+
+                </div>
+
+            </aside>
+
+        </div>
+
+    </div>
+
+
+    <!-- RESULT SCREEN -->
+
+    <div id="resultScreen" class="hidden">
+
+        <div class="result-card">
+
+            <div class="result-score">
+
+                <p>Test Completed</p>
+
+                <h1 id="resultPercentage">
+                    0%
+                </h1>
+
+                <div id="resultStatus"></div>
+
+            </div>
+
+            <div class="result-grid">
+
+                <div class="result-stat">
+                    <strong id="resultCorrect">0</strong>
+                    Correct
+                </div>
+
+                <div class="result-stat">
+                    <strong id="resultWrong">0</strong>
+                    Wrong
+                </div>
+
+                <div class="result-stat">
+                    <strong id="resultSkipped">0</strong>
+                    Skipped
+                </div>
+
+                <div class="result-stat">
+                    <strong id="resultMarks">0</strong>
+                    Marks
+                </div>
+
+            </div>
+
+            <div class="card"
+                 style="margin-top:20px">
+
+                <h3>Performance Analysis</h3>
+
+                <p id="performanceAnalysis"
+                   style="margin-top:10px;line-height:1.6">
+                </p>
+
+            </div>
+
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+
+                <button class="btn btn-primary"
+                        onclick="showAnswerReview()">
+                    Review Answers
+                </button>
+
+                <button class="btn btn-secondary"
+                        onclick="backToStudentHome()">
+                    Back to Tests
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ANSWER REVIEW -->
+
+    <div id="reviewScreen"
+         class="hidden"
+         style="max-width:900px;margin:30px auto;padding:20px;">
+
+        <div class="card">
+
+            <h2>Answer Review</h2>
+
+            <div id="answerReviewList"
+                 style="margin-top:20px">
+            </div>
+
+            <button class="btn btn-secondary"
+                    onclick="backToResult()">
+                ← Back to Result
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     ADD QUESTION MODAL
+===================================================== -->
+
+<div id="questionModal"
+     class="modal hidden">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h3>Add Question</h3>
+
+            <button class="btn btn-secondary"
+                    onclick="closeModal('questionModal')">
+                ✕
+            </button>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Question</label>
+
+            <textarea id="qQuestion"
+                      class="form-control"
+                      rows="3">
+            </textarea>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Option A</label>
+            <input id="qA" class="form-control">
+        </div>
+
+        <div class="form-group">
+
+            <label>Option B</label>
+            <input id="qB" class="form-control">
+        </div>
+
+        <div class="form-group">
+
+            <label>Option C</label>
+            <input id="qC" class="form-control">
+        </div>
+
+        <div class="form-group">
+
+            <label>Option D</label>
+            <input id="qD" class="form-control">
+        </div>
+
+        <div class="form-group">
+
+            <label>Correct Answer</label>
+
+            <select id="qAnswer"
+                    class="form-control">
+
+                <option value="A">Option A</option>
+                <option value="B">Option B</option>
+                <option value="C">Option C</option>
+                <option value="D">Option D</option>
+
+            </select>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Explanation</label>
+
+            <textarea id="qExplanation"
+                      class="form-control"
+                      rows="3">
+            </textarea>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Topic</label>
+
+            <input id="qTopic"
+                   class="form-control"
+                   placeholder="Computer Fundamentals">
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Difficulty</label>
+
+            <select id="qDifficulty"
+                    class="form-control">
+
+                <option>Easy</option>
+                <option selected>Medium</option>
+                <option>Hard</option>
+
+            </select>
+
+        </div>
+
+        <button class="btn btn-primary full"
+                onclick="saveQuestion()">
+            Save Question
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     TEST CREATOR MODAL
+===================================================== -->
+
+<div id="testModal"
+     class="modal hidden">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h3>Create Test</h3>
+
+            <button class="btn btn-secondary"
+                    onclick="closeModal('testModal')">
+                ✕
+            </button>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Test Name</label>
+
+            <input id="testName"
+                   class="form-control"
+                   placeholder="Computer Fundamentals Test">
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Duration (Minutes)</label>
+
+            <input id="testDuration"
+                   type="number"
+                   value="30"
+                   class="form-control">
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Marks Per Question</label>
+
+            <input id="testMarks"
+                   type="number"
+                   value="1"
+                   class="form-control">
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Passing Percentage</label>
+
+            <input id="testPassing"
+                   type="number"
+                   value="40"
+                   class="form-control">
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Number of Questions</label>
+
+            <input id="testQuestionCount"
+                   type="number"
+                   value="10"
+                   class="form-control">
+
+        </div>
+
+        <div class="form-group">
+
+            <label>
+                <input id="testShuffle"
+                       type="checkbox"
+                       checked>
+                Shuffle Questions
+            </label>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>
+                <input id="testOptionShuffle"
+                       type="checkbox"
+                       checked>
+                Shuffle Options
+            </label>
+
+        </div>
+
+        <button class="btn btn-primary full"
+                onclick="saveTest()">
+            Create Test
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     WARNING MODAL
+===================================================== -->
+
+<div id="warningModal"
+     class="modal hidden">
+
+    <div class="modal-box"
+         style="max-width:430px;text-align:center;">
+
+        <h2 style="color:#dc2626">
+            ⚠ Warning
+        </h2>
+
+        <p id="warningText"
+           style="margin:15px 0;line-height:1.6">
+        </p>
+
+        <button class="btn btn-danger"
+                onclick="closeModal('warningModal')">
+            Continue Test
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     TOAST
+===================================================== -->
+
+<div id="toast"
+     class="toast hidden">
+</div>
+
+
+<script>
+
+/* =====================================================
+   DATABASE / STORAGE
+===================================================== */
+
+const STORAGE = {
+
+    questions: "fbca_questions",
+    tests: "fbca_tests",
+    students: "fbca_students",
+    attempts: "fbca_attempts",
+    settings: "fbca_settings"
+
+};
+
+function getData(key, fallback=[]){
+
+    try{
+
+        const data = localStorage.getItem(key);
+
+        return data ? JSON.parse(data) : fallback;
+
+    }catch(error){
+
+        console.error(error);
+
+        return fallback;
+
+    }
+
+}
+
+function saveData(key,data){
+
+    localStorage.setItem(
+        key,
+        JSON.stringify(data)
+    );
+
+}
+
+
+/* =====================================================
+   DEFAULT DATA
+===================================================== */
+
+let questions = getData(STORAGE.questions);
+
+let tests = getData(STORAGE.tests);
+
+let students = getData(STORAGE.students);
+
+let attempts = getData(STORAGE.attempts);
+
+
+if(questions.length === 0){
+
+    questions = [
+
+        {
+            id:generateId(),
+            question:"Which device is known as the brain of the computer?",
+            options:{
+                A:"Monitor",
+                B:"CPU",
+                C:"Keyboard",
+                D:"Printer"
+            },
+            answer:"B",
+            explanation:"CPU performs processing operations and is commonly called the brain of the computer.",
+            topic:"Computer Fundamentals",
+            difficulty:"Easy"
+        },
+
+        {
+            id:generateId(),
+            question:"What does RAM stand for?",
+            options:{
+                A:"Random Access Memory",
+                B:"Read Access Memory",
+                C:"Run Access Memory",
+                D:"Random Application Memory"
+            },
+            answer:"A",
+            explanation:"RAM stands for Random Access Memory.",
+            topic:"Memory",
+            difficulty:"Easy"
+        },
+
+        {
+            id:generateId(),
+            question:"Which software is used to create spreadsheets?",
+            options:{
+                A:"MS Word",
+                B:"MS Excel",
+                C:"Paint",
+                D:"Notepad"
+            },
+            answer:"B",
+            explanation:"Microsoft Excel is a spreadsheet application.",
+            topic:"MS Excel",
+            difficulty:"Easy"
+        },
+
+        {
+            id:generateId(),
+            question:"Which one is an operating system?",
+            options:{
+                A:"Windows",
+                B:"Google",
+                C:"Intel",
+                D:"NVIDIA"
+            },
+            answer:"A",
+            explanation:"Windows is an operating system.",
+            topic:"Operating System",
+            difficulty:"Easy"
+        },
+
+        {
+            id:generateId(),
+            question:"Which key is commonly used to refresh a webpage?",
+            options:{
+                A:"F1",
+                B:"F2",
+                C:"F5",
+                D:"F12"
+            },
+            answer:"C",
+            explanation:"F5 is commonly used to refresh a webpage.",
+            topic:"Internet",
+            difficulty:"Easy"
+        }
+
+    ];
+
+    saveData(
+        STORAGE.questions,
+        questions
+    );
+
+}
+
+
+/* =====================================================
+   UTILITIES
+===================================================== */
+
+function generateId(){
+
+    return Date.now().toString(36)
+        + Math.random()
+        .toString(36)
+        .substring(2,8);
+
+}
+
+
+function escapeHTML(text){
+
+    return String(text ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent = message;
+
+    toast.classList.remove("hidden");
+
+    setTimeout(()=>{
+        toast.classList.add("hidden");
+    },2500);
+
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+function showLoginType(type){
+
+    const studentForm =
+        document.getElementById("studentLoginForm");
+
+    const adminForm =
+        document.getElementById("adminLoginForm");
+
+    const studentTab =
+        document.getElementById("studentTab");
+
+    const adminTab =
+        document.getElementById("adminTab");
+
+
+    if(type==="student"){
+
+        studentForm.classList.remove("hidden");
+
+        adminForm.classList.add("hidden");
+
+        studentTab.classList.add("active");
+
+        adminTab.classList.remove("active");
+
+    }else{
+
+        studentForm.classList.add("hidden");
+
+        adminForm.classList.remove("hidden");
+
+        studentTab.classList.remove("active");
+
+        adminTab.classList.add("active");
+
+    }
+
+}
+
+
+document
+.getElementById("studentLoginForm")
+.addEventListener("submit",function(e){
+
+    e.preventDefault();
+
+    const student = {
+
+        id:generateId(),
+
+        name:
+        document.getElementById("studentName")
+        .value.trim(),
+
+        batch:
+        document.getElementById("studentBatch")
+        .value.trim(),
+
+        branch:
+        document.getElementById("studentBranch")
+        .value,
+
+        roll:
+        document.getElementById("studentRoll")
+        .value.trim()
+
+    };
+
+
+    if(!student.name ||
+       !student.batch ||
+       !student.branch ||
+       !student.roll){
+
+        showToast("Please complete all details.");
+
+        return;
+
+    }
+
+
+    const existing =
+        students.find(s =>
+            s.roll===student.roll &&
+            s.batch===student.batch &&
+            s.branch===student.branch
+        );
+
+
+    if(existing){
+
+        student.id = existing.id;
+
+    }else{
+
+        students.push(student);
+
+        saveData(
+            STORAGE.students,
+            students
+        );
+
+    }
+
+
+    currentStudent = student;
+
+    openStudentPortal();
+
+});
+
+
+document
+.getElementById("adminLoginForm")
+.addEventListener("submit",function(e){
+
+    e.preventDefault();
+
+    const password =
+        document.getElementById("adminPassword").value;
+
+    if(password!=="admin123"){
+
+        showToast("Invalid admin password.");
+
+        return;
+
+    }
+
+    document
+    .getElementById("loginPage")
+    .classList.add("hidden");
+
+    document
+    .getElementById("adminApp")
+    .classList.remove("hidden");
+
+    updateDashboard();
+
+});
+
+
+function logout(){
+
+    location.reload();
+
+}
+
+
+/* =====================================================
+   ADMIN NAVIGATION
+===================================================== */
+
+function showPage(page,button){
+
+    document
+    .querySelectorAll(".page")
+    .forEach(p =>
+        p.classList.remove("active")
+    );
+
+    const target =
+        document.getElementById(
+            "page-"+page
+        );
+
+    if(target){
+        target.classList.add("active");
+    }
+
+
+    document
+    .querySelectorAll(".nav button")
+    .forEach(b =>
+        b.classList.remove("active")
+    );
+
+    if(button){
+        button.classList.add("active");
+    }
+
+
+    if(page==="dashboard"){
+        updateDashboard();
+    }
+
+    if(page==="questions"){
+        renderQuestions();
+    }
+
+    if(page==="tests"){
+        renderTests();
+    }
+
+    if(page==="students"){
+        renderStudents();
+    }
+
+    if(page==="results"){
+        renderResults();
+    }
+
+    document
+    .getElementById("sidebar")
+    .classList.remove("open");
+
+}
+
+
+function toggleSidebar(){
+
+    document
+    .getElementById("sidebar")
+    .classList.toggle("open");
+
+}
+
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+function updateDashboard(){
+
+    questions =
+        getData(STORAGE.questions);
+
+    tests =
+        getData(STORAGE.tests);
+
+    students =
+        getData(STORAGE.students);
+
+    attempts =
+        getData(STORAGE.attempts);
+
+
+    document.getElementById("statQuestions")
+        .textContent = questions.length;
+
+    document.getElementById("statTests")
+        .textContent = tests.length;
+
+    document.getElementById("statStudents")
+        .textContent = students.length;
+
+    document.getElementById("statAttempts")
+        .textContent = attempts.length;
+
+
+    renderRecentAttempts();
+
+}
+
+
+function renderRecentAttempts(){
+
+    const tbody =
+        document.getElementById(
+            "recentAttempts"
+        );
+
+    tbody.innerHTML = "";
+
+    const recent =
+        attempts
+        .slice()
+        .reverse()
+        .slice(0,10);
+
+
+    recent.forEach(a=>{
+
+        const tr =
+            document.createElement("tr");
+
+        tr.innerHTML = `
+
+            <td>${escapeHTML(a.studentName)}</td>
+
+            <td>${escapeHTML(a.testName)}</td>
+
+            <td>${a.score}</td>
+
+            <td>${a.percentage}%</td>
+
+            <td>${new Date(a.date).toLocaleString()}</td>
+
+        `;
+
+        tbody.appendChild(tr);
+
+    });
+
+}
+
+
+/* =====================================================
+   QUESTION BANK
+===================================================== */
+
+function renderQuestions(){
+
+    questions =
+        getData(STORAGE.questions);
+
+    const search =
+        document
+        .getElementById("questionSearch")
+        .value
+        .toLowerCase();
+
+    const difficulty =
+        document
+        .getElementById("difficultyFilter")
+        .value;
+
+
+    const filtered =
+        questions.filter(q=>{
+
+            const matchSearch =
+                q.question
+                .toLowerCase()
+                .includes(search);
+
+            const matchDifficulty =
+                !difficulty ||
+                q.difficulty===difficulty;
+
+            return matchSearch &&
+                   matchDifficulty;
+
+        });
+
+
+    const tbody =
+        document.getElementById(
+            "questionTable"
+        );
+
+    tbody.innerHTML = "";
+
+
+    filtered.forEach((q,index)=>{
+
+        const tr =
+            document.createElement("tr");
+
+        tr.innerHTML = `
+
+            <td>${index+1}</td>
+
+            <td>
+                ${escapeHTML(
+                    q.question
+                )}
+            </td>
+
+            <td>
+                ${escapeHTML(
+                    q.topic || "-"
+                )}
+            </td>
+
+            <td>
+                <span class="badge
+                    ${
+                        q.difficulty==="Easy"
+                        ?"badge-green"
+                        :
+                        q.difficulty==="Hard"
+                        ?"badge-red"
+                        :
+                        "badge-yellow"
+                    }">
+
+                    ${escapeHTML(q.difficulty)}
+
+                </span>
+            </td>
+
+            <td>
+                ${escapeHTML(q.answer)}
+            </td>
+
+            <td>
+
+                <button
+                    class="btn btn-danger"
+                    onclick="deleteQuestion('${q.id}')">
+
+                    Delete
+
+                </button>
+
+            </td>
+
+        `;
+
+        tbody.appendChild(tr);
+
+    });
+
+}
+
+
+function openAddQuestion(){
+
+    document
+    .getElementById("questionModal")
+    .classList.remove("hidden");
+
+}
+
+
+function saveQuestion(){
+
+    const question =
+        document.getElementById("qQuestion")
+        .value.trim();
+
+    const A =
+        document.getElementById("qA")
+        .value.trim();
+
+    const B =
+        document.getElementById("qB")
+        .value.trim();
+
+    const C =
+        document.getElementById("qC")
+        .value.trim();
+
+    const D =
+        document.getElementById("qD")
+        .value.trim();
+
+    const answer =
+        document.getElementById("qAnswer")
+        .value;
+
+    const explanation =
+        document.getElementById("qExplanation")
+        .value.trim();
+
+    const topic =
+        document.getElementById("qTopic")
+        .value.trim();
+
+    const difficulty =
+        document.getElementById("qDifficulty")
+        .value;
+
+
+    if(!question || !A || !B || !C || !D){
+
+        showToast(
+            "Please complete question and all options."
+        );
+
+        return;
+
+    }
+
+
+    questions.push({
+
+        id:generateId(),
+
+        question,
+
+        options:{
+            A,B,C,D
+        },
+
+        answer,
+
+        explanation,
+
+        topic,
+
+        difficulty
+
+    });
+
+
+    saveData(
+        STORAGE.questions,
+        questions
+    );
+
+
+    closeModal("questionModal");
+
+    document
+    .querySelectorAll("#questionModal input, #questionModal textarea")
+    .forEach(el=>el.value="");
+
+
+    renderQuestions();
+
+    updateDashboard();
+
+    showToast("Question added successfully.");
+
+}
+
+
+function deleteQuestion(id){
+
+    if(!confirm(
+        "Delete this question?"
+    )){
+        return;
+    }
+
+
+    questions =
+        questions.filter(
+            q=>q.id!==id
+        );
+
+
+    saveData(
+        STORAGE.questions,
+        questions
+    );
+
+
+    renderQuestions();
+
+    updateDashboard();
+
+    showToast("Question deleted.");
+
+}
+
+
+/* =====================================================
+   EXCEL IMPORT
+===================================================== */
+
+function importExcel(){
+
+    const file =
+        document
+        .getElementById("excelFile")
+        .files[0];
+
+
+    if(!file){
+
+        showToast(
+            "Please select an Excel file."
+        );
+
+        return;
+
+    }
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload=function(e){
+
+        try{
+
+            const workbook =
+                XLSX.read(
+                    e.target.result,
+                    {type:"array"}
+                );
+
+
+            const sheet =
+                workbook.Sheets[
+                    workbook.SheetNames[0]
+                ];
+
+
+            const rows =
+                XLSX.utils.sheet_to_json(
+                    sheet,
+                    {defval:""}
+                );
+
+
+            let imported = 0;
+
+            let invalid = 0;
+
+            const preview = [];
+
+
+            rows.forEach(row=>{
+
+                const question =
+                    String(
+                        row["Question"] || ""
+                    ).trim();
+
+                const A =
+                    String(
+                        row["Option A"] || ""
+                    ).trim();
+
+                const B =
+                    String(
+                        row["Option B"] || ""
+                    ).trim();
+
+                const C =
+                    String(
+                        row["Option C"] || ""
+                    ).trim();
+
+                const D =
+                    String(
+                        row["Option D"] || ""
+                    ).trim();
+
+                let answer =
+                    String(
+                        row["Answer"] || ""
+                    )
+                    .trim()
+                    .toUpperCase();
+
+
+                if(
+                    !question ||
+                    !A ||
+                    !B ||
+                    !C ||
+                    !D ||
+                    !["A","B","C","D"]
+                    .includes(answer)
+                ){
+
+                    invalid++;
+
+                    return;
+
+                }
+
+
+                const exists =
+                    questions.some(q =>
+                        q.question
+                        .trim()
+                        .toLowerCase()
+                        ===
+                        question
+                        .toLowerCase()
+                    );
+
+
+                if(exists){
+
+                    invalid++;
+
+                    return;
+
+                }
+
+
+                questions.push({
+
+                    id:generateId(),
+
+                    question,
+
+                    options:{
+                        A,B,C,D
+                    },
+
+                    answer,
+
+                    explanation:
+                        String(
+                            row["Explanation"] || ""
+                        ).trim(),
+
+                    topic:
+                        String(
+                            row["Topic"] || ""
+                        ).trim(),
+
+                    difficulty:
+                        String(
+                            row["Difficulty"] || "Medium"
+                        ).trim(),
+
+                    image:
+                        String(
+                            row["Image"] || ""
+                        ).trim()
+
+                });
+
+
+                imported++;
+
+                if(preview.length<10){
+
+                    preview.push({
+                        question,
+                        answer
+                    });
+
+                }
+
+            });
+
+
+            saveData(
+                STORAGE.questions,
+                questions
+            );
+
+
+            document
+            .getElementById("importPreview")
+            .innerHTML = `
+
+                <div class="card">
+
+                    <h3>Import Summary</h3>
+
+                    <p style="margin-top:10px">
+                        Imported:
+                        <strong>${imported}</strong>
+                    </p>
+
+                    <p>
+                        Invalid/Duplicate:
+                        <strong>${invalid}</strong>
+                    </p>
+
+                </div>
+
+            `;
+
+
+            renderQuestions();
+
+            updateDashboard();
+
+            showToast(
+                `${imported} questions imported.`
+            );
+
+
+        }catch(error){
+
+            console.error(error);
+
+            showToast(
+                "Excel file could not be read."
+            );
+
+        }
+
+    };
+
+
+    reader.readAsArrayBuffer(file);
+
+}
+
+
+function downloadTemplate(){
+
+    const data = [
+
+        {
+
+            Question:
+            "What is the full form of CPU?",
+
+            "Option A":
+            "Central Processing Unit",
+
+            "Option B":
+            "Computer Processing Unit",
+
+            "Option C":
+            "Central Program Unit",
+
+            "Option D":
+            "Computer Program Unit",
+
+            Answer:"A",
+
+            Explanation:
+            "CPU stands for Central Processing Unit.",
+
+            Topic:
+            "Computer Fundamentals",
+
+            Difficulty:
+            "Easy",
+
+            Image:""
+
+        }
+
+    ];
+
+
+    const worksheet =
+        XLSX.utils.json_to_sheet(data);
+
+    const workbook =
+        XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        "Questions"
+    );
+
+    XLSX.writeFile(
+        workbook,
+        "FBCA_Question_Template.xlsx"
+    );
+
+}
+
+
+/* =====================================================
+   TEST CREATOR
+===================================================== */
+
+function openTestCreator(){
+
+    document
+    .getElementById("testModal")
+    .classList.remove("hidden");
+
+}
+
+
+function saveTest(){
+
+    const name =
+        document.getElementById("testName")
+        .value.trim();
+
+    const duration =
+        Number(
+            document.getElementById("testDuration")
+            .value
+        );
+
+    const marks =
+        Number(
+            document.getElementById("testMarks")
+            .value
+        );
+
+    const passing =
+        Number(
+            document.getElementById("testPassing")
+            .value
+        );
+
+    const count =
+        Number(
+            document.getElementById("testQuestionCount")
+            .value
+        );
+
+
+    if(!name || !duration || !count){
+
+        showToast(
+            "Please enter test details."
+        );
+
+        return;
+
+    }
+
+
+    if(questions.length < count){
+
+        showToast(
+            `Only ${questions.length} questions are available.`
+        );
+
+        return;
+
+    }
+
+
+    tests.push({
+
+        id:generateId(),
+
+        name,
+
+        duration,
+
+        marks,
+
+        passing,
+
+        questionCount:count,
+
+        shuffle:
+            document
+            .getElementById("testShuffle")
+            .checked,
+
+        optionShuffle:
+            document
+            .getElementById("testOptionShuffle")
+            .checked
+
+    });
+
+
+    saveData(
+        STORAGE.tests,
+        tests
+    );
+
+
+    closeModal("testModal");
+
+    renderTests();
+
+    updateDashboard();
+
+    showToast(
+        "Test created successfully."
+    );
+
+}
+
+
+function renderTests(){
+
+    tests =
+        getData(STORAGE.tests);
+
+    const tbody =
+        document.getElementById(
+            "testTable"
+        );
+
+    tbody.innerHTML = "";
+
+
+    tests.forEach(test=>{
+
+        const tr =
+            document.createElement("tr");
+
+        tr.innerHTML = `
+
+            <td>${escapeHTML(test.name)}</td>
+
+            <td>${test.questionCount}</td>
+
+            <td>${test.duration} min</td>
+
+            <td>${test.marks}</td>
+
+            <td>
+
+                <button
+                    class="btn btn-danger"
+                    onclick="deleteTest('${test.id}')">
+
+                    Delete
+
+                </button>
+
+            </td>
+
+        `;
+
+        tbody.appendChild(tr);
+
+    });
+
+}
+
+
+function deleteTest(id){
+
+    if(!confirm(
+        "Delete this test?"
+    )){
+        return;
+    }
+
+    tests =
+        tests.filter(
+            t=>t.id!==id
+        );
+
+    saveData(
+        STORAGE.tests,
+        tests
+    );
+
+    renderTests();
+
+    updateDashboard();
+
+}
+
+
+/* =====================================================
+   STUDENT MANAGEMENT
+===================================================== */
+
+function renderStudents(){
+
+    students =
+        getData(STORAGE.students);
+
+    attempts =
+        getData(STORAGE.attempts);
+
+
+    const tbody =
+        document.getElementById(
+            "studentTable"
+        );
+
+    tbody.innerHTML = "";
+
+
+    students.forEach(student=>{
+
+        const count =
+            attempts.filter(
+                a=>a.studentId===student.id
+            ).length;
+
+
+        const tr =
+            document.createElement("tr");
+
+
+        tr.innerHTML = `
+
+            <td>${escapeHTML(student.name)}</td>
+
+            <td>${escapeHTML(student.batch)}</td>
+
+            <td>${escapeHTML(student.branch)}</td>
+
+            <td>${escapeHTML(student.roll)}</td>
+
+            <td>${count}</td>
+
+        `;
+
+
+        tbody.appendChild(tr);
+
+    });
+
+}
+
+
+/* =====================================================
+   RESULTS
+===================================================== */
+
+function renderResults(){
+
+    attempts =
+        getData(STORAGE.attempts);
+
+
+    const tbody =
+        document.getElementById(
+            "resultTable"
+        );
+
+    tbody.innerHTML = "";
+
+
+    attempts
+    .slice()
+    .reverse()
+    .forEach(a=>{
+
+        const tr =
+            document.createElement("tr");
+
+
+        tr.innerHTML = `
+
+            <td>${escapeHTML(a.studentName)}</td>
+
+            <td>${escapeHTML(a.testName)}</td>
+
+            <td>${a.correct}</td>
+
+            <td>${a.wrong}</td>
+
+            <td>${a.skipped}</td>
+
+            <td>${a.score}</td>
+
+            <td>${a.percentage}%</td>
+
+            <td>${new Date(a.date).toLocaleString()}</td>
+
+        `;
+
+
+        tbody.appendChild(tr);
+
+    });
+
+}
+
+
+/* =====================================================
+   STUDENT PORTAL
+===================================================== */
+
+let currentStudent = null;
+
+let currentTest = null;
+
+let currentQuestions = [];
+
+let currentIndex = 0;
+
+let answers = {};
+
+let reviews = {};
+
+let timerInterval = null;
+
+let remainingSeconds = 0;
+
+let warningCount = 0;
+
+const MAX_WARNINGS = 3;
+
+
+function openStudentPortal(){
+
+    document
+    .getElementById("loginPage")
+    .classList.add("hidden");
+
+    document
+    .getElementById("studentApp")
+    .classList.remove("hidden");
+
+
+    document
+    .getElementById("welcomeStudent")
+    .textContent =
+        currentStudent.name;
+
+
+    renderStudentTests();
+
+}
+
+
+function renderStudentTests(){
+
+    tests =
+        getData(STORAGE.tests);
+
+
+    const container =
+        document.getElementById(
+            "studentTestList"
+        );
+
+
+    if(tests.length===0){
+
+        container.innerHTML = `
+
+            <div class="card">
+
+                <h3>No test available</h3>
+
+                <p style="color:#64748b;margin-top:8px">
+                    Please contact your teacher/admin.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML = "";
+
+
+    tests.forEach(test=>{
+
+        const div =
+            document.createElement("div");
+
+        div.className = "card";
+
+
+        div.innerHTML = `
+
+            <h3>
+                ${escapeHTML(test.name)}
+            </h3>
+
+            <p style="color:#64748b;margin:8px 0">
+                ${test.questionCount} Questions
+                • ${test.duration} Minutes
+            </p>
+
+            <button
+                class="btn btn-primary"
+                onclick="startTest('${test.id}')">
+
+                Start Test
+
+            </button>
+
+        `;
+
+
+        container.appendChild(div);
+
+    });
+
+}
+
+
+function startTest(testId){
+
+    tests =
+        getData(STORAGE.tests);
+
+    questions =
+        getData(STORAGE.questions);
+
+
+    currentTest =
+        tests.find(
+            t=>t.id===testId
+        );
+
+
+    if(!currentTest){
+
+        showToast("Test not found.");
+
+        return;
+
+    }
+
+
+    let selected =
+        [...questions];
+
+
+    if(currentTest.shuffle){
+
+        selected =
+            shuffleArray(selected);
+
+    }
+
+
+    selected =
+        selected.slice(
+            0,
+            currentTest.questionCount
+        );
+
+
+    currentQuestions =
+        selected.map(q=>{
+
+            const copy =
+                JSON.parse(
+                    JSON.stringify(q)
+                );
+
+
+            if(currentTest.optionShuffle){
+
+                copy.options =
+                    shuffleOptions(
+                        copy.options,
+                        copy.answer
+                    );
+
+            }
+
+            return copy;
+
+        });
+
+
+    currentIndex = 0;
+
+    answers = {};
+
+    reviews = {};
+
+    warningCount = 0;
+
+
+    remainingSeconds =
+        currentTest.duration * 60;
+
+
+    document
+    .getElementById("studentHome")
+    .classList.add("hidden");
+
+
+    document
+    .getElementById("resultScreen")
+    .classList.add("hidden");
+
+
+    document
+    .getElementById("reviewScreen")
+    .classList.add("hidden");
+
+
+    document
+    .getElementById("testScreen")
+    .classList.remove("hidden");
+
+
+    document
+    .getElementById("runningTestName")
+    .textContent =
+        currentTest.name;
+
+
+    renderQuestion();
+
+    renderPalette();
+
+    startTimer();
+
+    setupAntiCheating();
+
+}
+
+
+/* =====================================================
+   SHUFFLE
+===================================================== */
+
+function shuffleArray(array){
+
+    const arr = [...array];
+
+    for(let i=arr.length-1;i>0;i--){
+
+        const j =
+            Math.floor(
+                Math.random()*(i+1)
+            );
+
+        [
+            arr[i],
+            arr[j]
+        ] =
+        [
+            arr[j],
+            arr[i]
+        ];
+
+    }
+
+    return arr;
+
+}
+
+
+function shuffleOptions(options,correctAnswer){
+
+    const letters =
+        ["A","B","C","D"];
+
+
+    const values =
+        letters.map(letter=>({
+
+            oldLetter:letter,
+
+            value:options[letter]
+
+        }));
+
+
+    const shuffled =
+        shuffleArray(values);
+
+
+    const newOptions = {};
+
+    let newCorrect = "";
+
+
+    shuffled.forEach(
+        (item,index)=>{
+
+            const newLetter =
+                letters[index];
+
+            newOptions[newLetter] =
+                item.value;
+
+
+            if(
+                item.oldLetter
+                ===
+                correctAnswer
+            ){
+
+                newCorrect =
+                    newLetter;
+
+            }
+
+        }
+    );
+
+
+    returnObject = {
+        options:newOptions,
+        answer:newCorrect
+    };
+
+
+    /* Because objects are copied by reference,
+       update the caller's question later. */
+
+    currentQuestions[
+        currentQuestions.length-1
+    ];
+
+
+    return {
+        ...newOptions
+    };
+
+}
+
+
+/* Correct option shuffle implementation */
+
+function shuffleQuestionOptions(q){
+
+    const letters =
+        ["A","B","C","D"];
+
+    const items =
+        letters.map(letter=>({
+            text:q.options[letter],
+            correct:
+                letter===q.answer
+        }));
+
+    const shuffled =
+        shuffleArray(items);
+
+    const newOptions={};
+
+    let newAnswer="";
+
+    shuffled.forEach((item,index)=>{
+
+        const letter =
+            letters[index];
+
+        newOptions[letter]=item.text;
+
+        if(item.correct){
+            newAnswer=letter;
+        }
+
+    });
+
+    q.options=newOptions;
+
+    q.answer=newAnswer;
+
+    return q;
+
+}
+
+
+/* =====================================================
+   QUESTION DISPLAY
+===================================================== */
+
+function renderQuestion(){
+
+    const q =
+        currentQuestions[currentIndex];
+
+
+    if(!q) return;
+
+
+    document
+    .getElementById("questionNumber")
+    .textContent =
+        `Question ${currentIndex+1} of ${currentQuestions.length}`;
+
+
+    document
+    .getElementById("questionText")
+    .textContent =
+        q.question;
+
+
+    const container =
+        document.getElementById(
+            "optionsContainer"
+        );
+
+
+    container.innerHTML = "";
+
+
+    ["A","B","C","D"]
+    .forEach(letter=>{
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            "option";
+
+
+        if(answers[currentIndex]===letter){
+
+            div.classList.add("selected");
+
+        }
+
+
+        div.innerHTML = `
+
+            <input
+                type="radio"
+                name="answer"
+                value="${letter}"
+                ${answers[currentIndex]===letter
+                    ?"checked"
+                    :""
+                }>
+
+            <span>
+                <strong>${letter}.</strong>
+                ${escapeHTML(q.options[letter])}
+            </span>
+
+        `;
+
+
+        div.onclick=function(){
+
+            answers[currentIndex]=letter;
+
+            saveTestState();
+
+            renderQuestion();
+
+            renderPalette();
+
+        };
+
+
+        container.appendChild(div);
+
+    });
+
+
+    renderPalette();
+
+}
+
+
+function nextQuestion(){
+
+    if(currentIndex <
+       currentQuestions.length-1){
+
+        currentIndex++;
+
+        renderQuestion();
+
+    }
+
+}
+
+
+function previousQuestion(){
+
+    if(currentIndex>0){
+
+        currentIndex--;
+
+        renderQuestion();
+
+    }
+
+}
+
+
+function clearAnswer(){
+
+    delete answers[currentIndex];
+
+    saveTestState();
+
+    renderQuestion();
+
+}
+
+
+function toggleReview(){
+
+    reviews[currentIndex] =
+        !reviews[currentIndex];
+
+    saveTestState();
+
+    renderPalette();
+
+}
+
+
+function goToQuestion(index){
+
+    currentIndex=index;
+
+    renderQuestion();
+
+}
+
+
+/* =====================================================
+   PALETTE
+===================================================== */
+
+function renderPalette(){
+
+    const palette =
+        document.getElementById(
+            "questionPalette"
+        );
+
+    palette.innerHTML = "";
+
+
+    currentQuestions.forEach(
+        (q,index)=>{
+
+            const button =
+                document.createElement("button");
+
+            button.textContent =
+                index+1;
+
+
+            if(answers[index]){
+
+                button.classList.add(
+                    "answered"
+                );
+
+            }
+
+
+            if(reviews[index]){
+
+                button.classList.add(
+                    "review"
+                );
+
+            }
+
+
+            if(index===currentIndex){
+
+                button.classList.add(
+                    "current"
+                );
+
+            }
+
+
+            button.onclick=()=>{
+
+                goToQuestion(index);
+
+            };
+
+
+            palette.appendChild(button);
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   TIMER
+===================================================== */
+
+function startTimer(){
+
+    clearInterval(timerInterval);
+
+
+    updateTimer();
+
+
+    timerInterval =
+        setInterval(()=>{
+
+            remainingSeconds--;
+
+            updateTimer();
+
+
+            if(remainingSeconds<=0){
+
+                clearInterval(
+                    timerInterval
+                );
+
+                submitTest(true);
+
+            }
+
+        },1000);
+
+}
+
+
+function updateTimer(){
+
+    const min =
+        Math.floor(
+            remainingSeconds/60
+        );
+
+    const sec =
+        remainingSeconds%60;
+
+
+    document
+    .getElementById("timer")
+    .textContent =
+        String(min).padStart(2,"0")
+        +":"+
+        String(sec).padStart(2,"0");
+
+
+    if(remainingSeconds<=60){
+
+        document
+        .getElementById("timer")
+        .style.background="#991b1b";
+
+    }
+
+}
+
+
+/* =====================================================
+   AUTO SAVE
+===================================================== */
+
+function saveTestState(){
+
+    if(!currentTest ||
+       !currentStudent){
+
+        return;
+
+    }
+
+
+    const state = {
+
+        studentId:
+            currentStudent.id,
+
+        testId:
+            currentTest.id,
+
+        currentIndex,
+
+        answers,
+
+        reviews,
+
+        remainingSeconds,
+
+        timestamp:
+            Date.now()
+
+    };
+
+
+    localStorage.setItem(
+        "fbca_active_test",
+        JSON.stringify(state)
+    );
+
+}
+
+
+/* =====================================================
+   SUBMIT
+===================================================== */
+
+function confirmSubmit(){
+
+    const answered =
+        Object.keys(answers).length;
+
+
+    const unanswered =
+        currentQuestions.length
+        -
+        answered;
+
+
+    if(!confirm(
+        `You have answered ${answered} questions.\n\n`+
+        `${unanswered} questions are unanswered.\n\n`+
+        `Submit test?`
+    )){
+
+        return;
+
+    }
+
+
+    submitTest(false);
+
+}
+
+
+function submitTest(autoSubmit){
+
+    clearInterval(timerInterval);
+
+
+    let correct=0;
+
+    let wrong=0;
+
+    let skipped=0;
+
+
+    const reviewData=[];
+
+
+    currentQuestions.forEach(
+        (q,index)=>{
+
+            const selected =
+                answers[index];
+
+
+            if(!selected){
+
+                skipped++;
+
+            }else if(
+                selected===q.answer
+            ){
+
+                correct++;
+
+            }else{
+
+                wrong++;
+
+            }
+
+
+            reviewData.push({
+
+                question:q.question,
+
+                options:q.options,
+
+                correct:q.answer,
+
+                selected:selected || null,
+
+                explanation:q.explanation,
+
+                topic:q.topic,
+
+                difficulty:q.difficulty
+
+            });
+
+        }
+    );
+
+
+    const score =
+        correct *
+        currentTest.marks;
+
+
+    const totalMarks =
+        currentQuestions.length *
+        currentTest.marks;
+
+
+    const percentage =
+        totalMarks>0
+        ?
+        Math.round(
+            (score/totalMarks)*100
+        )
+        :
+        0;
+
+
+    const attempt={
+
+        id:generateId(),
+
+        studentId:
+            currentStudent.id,
+
+        studentName:
+            currentStudent.name,
+
+        batch:
+            currentStudent.batch,
+
+        branch:
+            currentStudent.branch,
+
+        roll:
+            currentStudent.roll,
+
+        testId:
+            currentTest.id,
+
+        testName:
+            currentTest.name,
+
+        correct,
+
+        wrong,
+
+        skipped,
+
+        score,
+
+        totalMarks,
+
+        percentage,
+
+        passed:
+            percentage>=currentTest.passing,
+
+        autoSubmit,
+
+        date:
+            new Date().toISOString(),
+
+        reviewData
+
+    };
+
+
+    attempts =
+        getData(STORAGE.attempts);
+
+
+    attempts.push(attempt);
+
+
+    saveData(
+        STORAGE.attempts,
+        attempts
+    );
+
+
+    localStorage.removeItem(
+        "fbca_active_test"
+    );
+
+
+    showResult(attempt);
+
+}
+
+
+/* =====================================================
+   RESULT
+===================================================== */
+
+let lastAttempt = null;
+
+
+function showResult(attempt){
+
+    lastAttempt=attempt;
+
+
+    document
+    .getElementById("testScreen")
+    .classList.add("hidden");
+
+
+    document
+    .getElementById("resultScreen")
+    .classList.remove("hidden");
+
+
+    document
+    .getElementById("resultPercentage")
+    .textContent =
+        attempt.percentage+"%";
+
+
+    document
+    .getElementById("resultCorrect")
+    .textContent =
+        attempt.correct;
+
+
+    document
+    .getElementById("resultWrong")
+    .textContent =
+        attempt.wrong;
+
+
+    document
+    .getElementById("resultSkipped")
+    .textContent =
+        attempt.skipped;
+
+
+    document
+    .getElementById("resultMarks")
+    .textContent =
+        attempt.score;
+
+
+    document
+    .getElementById("resultStatus")
+    .innerHTML =
+        attempt.passed
+        ?
+        `<span class="badge badge-green">
+            PASS
+        </span>`
+        :
+        `<span class="badge badge-red">
+            FAIL
+        </span>`;
+
+
+    document
+    .getElementById("performanceAnalysis")
+    .textContent =
+        generatePerformanceAnalysis(
+            attempt
+        );
+
+}
+
+
+function generatePerformanceAnalysis(attempt){
+
+    const accuracy =
+        attempt.correct +
+        attempt.wrong > 0
+        ?
+        Math.round(
+            attempt.correct /
+            (attempt.correct+
+             attempt.wrong)
+            *100
+        )
+        :
+        0;
+
+
+    if(attempt.percentage>=80){
+
+        return `Excellent performance. Your score is ${attempt.percentage}% with approximately ${accuracy}% accuracy. Continue practicing to maintain this level.`;
+
+    }
+
+
+    if(attempt.percentage>=60){
+
+        return `Good performance. Your score is ${attempt.percentage}%. Focus on the questions you answered incorrectly and practice those topics again.`;
+
+    }
+
+
+    if(attempt.percentage>=40){
+
+        return `You have passed the test, but there is room for improvement. Review incorrect answers and practice the related topics.`;
+
+    }
+
+
+    return `Your score is below the passing level. Start with the basic concepts and practice the weak areas before attempting the test again.`;
+
+}
+
+
+function showAnswerReview(){
+
+    document
+    .getElementById("resultScreen")
+    .classList.add("hidden");
+
+
+    document
+    .getElementById("reviewScreen")
+    .classList.remove("hidden");
+
+
+    const container =
+        document.getElementById(
+            "answerReviewList"
+        );
+
+
+    container.innerHTML = "";
+
+
+    lastAttempt.reviewData
+    .forEach((item,index)=>{
+
+        const correct =
+            item.selected===item.correct;
+
+
+        const div =
+            document.createElement("div");
+
+
+        div.className="card";
+
+
+        div.innerHTML = `
+
+            <h3>
+                Q${index+1}.
+                ${escapeHTML(item.question)}
+            </h3>
+
+            <p style="margin-top:12px">
+                Your Answer:
+                <strong>
+                    ${
+                        item.selected
+                        ?
+                        escapeHTML(
+                            item.options[item.selected]
+                        )
+                        :
+                        "Not Answered"
+                    }
+                </strong>
+            </p>
+
+            <p style="margin-top:7px">
+                Correct Answer:
+                <strong>
+                    ${escapeHTML(
+                        item.options[item.correct]
+                    )}
+                </strong>
+            </p>
+
+            <p style="
+                margin-top:10px;
+                color:#64748b;
+                line-height:1.5">
+
+                ${escapeHTML(
+                    item.explanation ||
+                    "No explanation available."
+                )}
+
+            </p>
+
+        `;
+
+
+        container.appendChild(div);
+
+    });
+
+}
+
+
+function backToResult(){
+
+    document
+    .getElementById("reviewScreen")
+    .classList.add("hidden");
+
+
+    document
+    .getElementById("resultScreen")
+    .classList.remove("hidden");
+
+}
+
+
+function backToStudentHome(){
+
+    document
+    .getElementById("resultScreen")
+    .classList.add("hidden");
+
+
+    document
+    .getElementById("studentHome")
+    .classList.remove("hidden");
+
+
+    renderStudentTests();
+
+}
+
+
+function studentLogout(){
+
+    clearInterval(timerInterval);
+
+    location.reload();
+
+}
+
+
+/* =====================================================
+   ANTI CHEATING
+===================================================== */
+
+function setupAntiCheating(){
+
+    document.oncontextmenu =
+        function(e){
+
+            if(currentTest){
+
+                e.preventDefault();
+
+            }
+
+        };
+
+
+    document.oncopy =
+        function(e){
+
+            if(currentTest){
+
+                e.preventDefault();
+
+            }
+
+        };
+
+
+    document.oncut =
+        function(e){
+
+            if(currentTest){
+
+                e.preventDefault();
+
+            }
+
+        };
+
+
+    document.onpaste =
+        function(e){
+
+            if(currentTest){
+
+                e.preventDefault();
+
+            }
+
+        };
+
+
+    document.onkeydown =
+        function(e){
+
+            if(!currentTest){
+
+                return;
+
+            }
+
+
+            if(
+                e.ctrlKey &&
+                [
+                    "c",
+                    "v",
+                    "x",
+                    "u",
+                    "s",
+                    "p"
+                ].includes(
+                    e.key.toLowerCase()
+                )
+            ){
+
+                e.preventDefault();
+
+            }
+
+        };
+
+
+    document.addEventListener(
+        "visibilitychange",
+        handleTabSwitch
+    );
+
+}
+
+
+function handleTabSwitch(){
+
+    if(
+        document.hidden &&
+        currentTest
+    ){
+
+        warningCount++;
+
+
+        if(
+            warningCount>=MAX_WARNINGS
+        ){
+
+            alert(
+                "Maximum tab-switch warnings reached. Your test will be submitted."
+            );
+
+            submitTest(true);
+
+            return;
+
+        }
+
+
+        document
+        .getElementById("warningText")
+        .textContent =
+            `You have left the test window. Warning ${warningCount}/${MAX_WARNINGS}. One more violation may submit your test.`;
+
+
+        document
+        .getElementById("warningModal")
+        .classList.remove("hidden");
+
+    }
+
+}
+
+
+/* =====================================================
+   BACKUP / RESTORE
+===================================================== */
+
+function downloadBackup(){
+
+    const backup={
+
+        version:"1.0",
+
+        academy:
+            "Future Boost Computer Academy",
+
+        date:
+            new Date().toISOString(),
+
+        questions:
+            getData(STORAGE.questions),
+
+        tests:
+            getData(STORAGE.tests),
+
+        students:
+            getData(STORAGE.students),
+
+        attempts:
+            getData(STORAGE.attempts)
+
+    };
+
+
+    const blob =
+        new Blob(
+            [
+                JSON.stringify(
+                    backup,
+                    null,
+                    2
+                )
+            ],
+            {
+                type:
+                "application/json"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const a =
+        document.createElement("a");
+
+
+    a.href=url;
+
+    a.download=
+        "FBCA_Backup_"+
+        new Date()
+        .toISOString()
+        .slice(0,10)+
+        ".json";
+
+
+    a.click();
+
+
+    URL.revokeObjectURL(url);
+
+    showToast(
+        "Backup downloaded."
+    );
+
+}
+
+
+function restoreBackup(){
+
+    const file =
+        document
+        .getElementById("backupFile")
+        .files[0];
+
+
+    if(!file){
+
+        showToast(
+            "Select a backup file first."
+        );
+
+        return;
+
+    }
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload=function(e){
+
+        try{
+
+            const backup =
+                JSON.parse(
+                    e.target.result
+                );
+
+
+            if(!backup.questions ||
+               !backup.tests ||
+               !backup.students ||
+               !backup.attempts){
+
+                throw new Error(
+                    "Invalid backup"
+                );
+
+            }
+
+
+            if(!confirm(
+                "Restore backup? Existing local data will be replaced."
+            )){
+
+                return;
+
+            }
+
+
+            saveData(
+                STORAGE.questions,
+                backup.questions
+            );
+
+            saveData(
+                STORAGE.tests,
+                backup.tests
+            );
+
+            saveData(
+                STORAGE.students,
+                backup.students
+            );
+
+            saveData(
+                STORAGE.attempts,
+                backup.attempts
+            );
+
+
+            questions=backup.questions;
+
+            tests=backup.tests;
+
+            students=backup.students;
+
+            attempts=backup.attempts;
+
+
+            updateDashboard();
+
+            showToast(
+                "Backup restored successfully."
+            );
+
+
+        }catch(error){
+
+            console.error(error);
+
+            showToast(
+                "Invalid backup file."
+            );
+
+        }
+
+    };
+
+
+    reader.readAsText(file);
+
+}
+
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+function closeModal(id){
+
+    document
+    .getElementById(id)
+    .classList.add("hidden");
+
+}
+
+
+/* =====================================================
+   INITIALIZATION
+===================================================== */
+
+updateDashboard();
+
+</script>
+
+</body>
+</html>
